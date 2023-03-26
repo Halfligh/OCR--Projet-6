@@ -7,9 +7,12 @@ const MIME_TYPES = {
 };
 
 const storage = multer.diskStorage({
+  // Fonction indiquant d'enregistrer dans le dossier images
   destination: (req, file, callback) => {
     callback(null, 'images');
   },
+
+  // Fonction formattant le nom des fichiers
   filename: (req, file, callback) => {
     const name = file.originalname.split(' ').join('_');
     const extension = MIME_TYPES[file.mimetype];
@@ -17,4 +20,5 @@ const storage = multer.diskStorage({
   }
 });
 
+// Export de notre élément + paramétrage ajout d'image uniquement
 module.exports = multer({storage: storage}).single('image');

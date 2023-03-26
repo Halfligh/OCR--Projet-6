@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const userRoutes = require ('./routes/user.js')
+const sauceRoutes = require ('./routes/sauce.js')
+const path = require('path');
 
 // Connexion à MongoDB
 mongoose.connect('mongodb+srv://sebastien:QW7xvFX8AibbXHrV@clusterprojet6.vptnk9y.mongodb.net/?retryWrites=true&w=majority',
@@ -14,6 +16,12 @@ mongoose.connect('mongodb+srv://sebastien:QW7xvFX8AibbXHrV@clusterprojet6.vptnk9
 
 const app = express();
 
+// Gestion de la ressource image de manière statique
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
+// MiddleWare qui intercepte tous les requêtes qui contiennent du JSON et nous mette à disposition le contenu de ces requêtes sur req.body
+app.use(express.json());
+
 // Autoriser les CORS - Permettre communication entre localhost:3000 et localhost:4200
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -22,44 +30,26 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
-// Utilisation du router User 
+// Utilisation des routes
 app.use('/api/auth', userRoutes);
+app.use('/api/sauces', sauceRoutes);
 
 module.exports = app;
 
-// const helmet = require('helmet');
-// const path = require('path');
-// const rateLimit = require("express-rate-limit");
 
-// const sauceRoutes = require('./routes/sauce');
-// const userRoutes = require('./routes/user');
-// const auth = require('./middleware/auth');
+
+
+// const helmet = require('helmet');
+// const rateLimit = require("express-rate-limit");
 // const limiter = rateLimit({
 //   windowMs: 15 * 60 * 1000, // 15 minutes
 //   max: 100 // limit each IP to 100 requests per windowMs
 // });
 
-// const app = express();
-
 // // Configure helmet to secure Express app
 // app.use(helmet());
 
-// // Define the folder for static files
-// app.use(express.static(path.join(__dirname, 'public')));
-
 // // Limit the number of requests for each IP
 // app.use(limiter);
-
-// MiddleWare qui intercepte tous les requêtes qui contiennent du JSON et nous mette à disposition le contenu de ces requêtes sur req.body
-// app.use(express.json());
-
-// // Auth middleware
-// app.use(auth);
-
-// // Routes
-// app.use('/api/sauces', sauceRoutes);
-// app.use('/api/auth', userRoutes);
-
-// module.exports = app;
