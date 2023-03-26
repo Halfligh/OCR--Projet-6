@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// const uniqueValidator = require('mongoose-unique-validator');
+const uniqueValidator = require('mongoose-unique-validator');
 // const bcrypt = require('bcrypt');
 
 const userSchema = mongoose.Schema({
@@ -14,8 +14,8 @@ const userSchema = mongoose.Schema({
   },
 });
 
-// // Vérifier que l'email est unique avec le plugin uniqueValidator 
-// userSchema.plugin(uniqueValidator);
+// Vérifier que l'email est unique avec le plugin uniqueValidator 
+userSchema.plugin(uniqueValidator);
 
 // // Hacher le mot de passe avant de sauvegarder l'utilisateur avec la méthode .pre
 // userSchema.pre('save', async function (next) {
@@ -43,6 +43,4 @@ const userSchema = mongoose.Schema({
 //   }
 // };
 
-const User = mongoose.model('User', userSchema);
-
-module.exports = User;
+module.exports = mongoose.model('User', userSchema);

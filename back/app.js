@@ -1,8 +1,8 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const userRoutes = require ('./routes/user.js')
 
-const app = express();
+const userRoutes = require ('./routes/user.js')
 
 // Connexion à MongoDB
 mongoose.connect('mongodb+srv://sebastien:QW7xvFX8AibbXHrV@clusterprojet6.vptnk9y.mongodb.net/?retryWrites=true&w=majority',
@@ -10,6 +10,9 @@ mongoose.connect('mongodb+srv://sebastien:QW7xvFX8AibbXHrV@clusterprojet6.vptnk9
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
+
+
+const app = express();
 
 // Autoriser les CORS - Permettre communication entre localhost:3000 et localhost:4200
 app.use((req, res, next) => {
@@ -22,7 +25,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 // Utilisation du router User 
-app.use('/api/auth/signup', userRoutes);
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
 
