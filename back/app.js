@@ -1,16 +1,29 @@
 const express = require('express');
+const mongoose = require('mongoose');
 
 const app = express();
 
-// app.use((req, res, next) => {
-//   res.status(201);
-//   next();
-// });
+// Connexion à MongoDB
+mongoose.connect('mongodb+srv://sebastien:QW7xvFX8AibbXHrV@clusterprojet6.vptnk9y.mongodb.net/?retryWrites=true&w=majority',
+  { useNewUrlParser: true,
+    useUnifiedTopology: true })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-// app.use((req, res, next) => {
-//   res.json({ message: 'Votre requête a bien été reçue !' });
-//   next();
-// });
+// Autoriser les CORS - Permettre communication entre localhost:3000 et localhost:4200
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  next();
+});
+
+app.post('/api/sauces', (req, res, next) => {
+  console.log(req.body);
+  res.status(201).json({
+    message: 'Objet créé !'
+  });
+});
 
 app.use('/api/sauces', (req, res, next) => {
   const sauces = [
@@ -63,14 +76,6 @@ module.exports = app;
 
 // MiddleWare qui intercepte tous les requêtes qui contiennent du JSON et nous mette à disposition le contenu de ces requêtes sur req.body
 // app.use(express.json());
-
-// // Enable CORS
-// app.use((req, res, next) => {
-//   res.setHeader('Access-Control-Allow-Origin', '*');
-//   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-//   next();
-// });
 
 // Test requpete postman
 
