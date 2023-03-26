@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const userRoutes = require ('./routes/user.js')
 
 const app = express();
 
@@ -18,39 +19,13 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/api/sauces', (req, res, next) => {
-  console.log(req.body);
-  res.status(201).json({
-    message: 'Objet créé !'
-  });
-});
+app.use(bodyParser.json());
 
-app.use('/api/sauces', (req, res, next) => {
-  const sauces = [
-    {
-      _id: 'oeihfzeoi',
-      title: 'Mon premier objet',
-      description: 'Les infos de mon premier objet',
-      imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-      price: 4900,
-      userId: 'qsomihvqios',
-    },
-    {
-      _id: 'oeihfzeomoihi',
-      title: 'Mon deuxième objet',
-      description: 'Les infos de mon deuxième objet',
-      imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-      price: 2900,
-      userId: 'qsomihvqios',
-    },
-  ];
-  res.status(200).json(sauces);
-});
+// Utilisation du router User 
+app.use('/api/auth/signup', userRoutes);
 
 module.exports = app;
 
-// const express = require('express');
-// const mongoose = require('mongoose');
 // const helmet = require('helmet');
 // const path = require('path');
 // const rateLimit = require("express-rate-limit");
@@ -76,24 +51,6 @@ module.exports = app;
 
 // MiddleWare qui intercepte tous les requêtes qui contiennent du JSON et nous mette à disposition le contenu de ces requêtes sur req.body
 // app.use(express.json());
-
-// Test requpete postman
-
-// app.use((req, res, next) => {
-//   console.log('Requête reçue ! ');
-//   next();
-// })
-
-// app.use((req, res, next) => {
-//   res.status(201);
-//   next();
-// })
-
-// app.use((req, res, next) => {
-//   res.json({message : 'Votre requête à bien été reçue'});
-//   next();
-// })
-
 
 // // Auth middleware
 // app.use(auth);
