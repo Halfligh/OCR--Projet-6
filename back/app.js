@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const errorHandler = require('../back/middleware/winston-error-handler');
 
 const userRoutes = require ('./routes/user.js')
 const sauceRoutes = require ('./routes/sauce.js')
@@ -31,6 +32,9 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
+
+// Utilisation du récupérateur d'erreurs Winston 
+app.use(errorHandler);
 
 // Utilisation des routes
 app.use('/api/auth', userRoutes);
