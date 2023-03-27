@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const errorHandler = require('../back/middleware/winston-error-handler');
+const helmet = require('helmet');
+const rateLimit = require("express-rate-limit");
 
 const userRoutes = require ('./routes/user.js')
 const sauceRoutes = require ('./routes/sauce.js')
@@ -36,6 +38,16 @@ app.use(bodyParser.json());
 // Utilisation du récupérateur d'erreurs Winston 
 app.use(errorHandler);
 
+// Configuration en-têtes HTTP, tels que CSP, X-XSS-Protection, X-Frame-Options, etc
+app.use(helmet());
+
+// Limite le nombre de requêtes pour chaque adresse IP
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use(limiter);
+
 // Utilisation des routes
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', sauceRoutes);
@@ -45,15 +57,14 @@ module.exports = app;
 
 
 
-// const helmet = require('helmet');
+
 // const rateLimit = require("express-rate-limit");
 // const limiter = rateLimit({
 //   windowMs: 15 * 60 * 1000, // 15 minutes
 //   max: 100 // limit each IP to 100 requests per windowMs
 // });
 
-// // Configure helmet to secure Express app
-// app.use(helmet());
+
 
 // // Limit the number of requests for each IP
 // app.use(limiter);
