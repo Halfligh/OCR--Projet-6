@@ -1,12 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const errorHandler = require('../back/middleware/winston-error-handler');
 const helmet = require('helmet');
 const rateLimit = require("express-rate-limit");
+const winstonLog = require('./middleware/winston-config');
 
-const userRoutes = require ('./routes/user.js')
-const sauceRoutes = require ('./routes/sauce.js')
+const userRoutes = require('./routes/user.js')
+const sauceRoutes = require('./routes/sauce.js')
 const path = require('path');
 
 // Connexion à MongoDB
@@ -33,10 +33,8 @@ app.use((req, res, next) => {
   next();
 });
 
+// Utilisation des middlewares
 app.use(bodyParser.json());
-
-// Utilisation du récupérateur d'erreurs Winston 
-app.use(errorHandler);
 
 // Configuration en-têtes HTTP, tels que CSP, X-XSS-Protection, X-Frame-Options, etc
 app.use(helmet());
@@ -47,6 +45,23 @@ const limiter = rateLimit({
   max: 100 // limit each IP to 100 requests per windowMs
 });
 app.use(limiter);
+
+// Middleware pour vérifier le fonctionnement de Winston : accéder à URL /test-error --> déclenche erreur avec le message 'Test error' qui sera ensuite capturée par Winston.
+app.get('/test-error', (req, res, next) => {
+  next(new Error('Test error'));
+});
+
+// Centralisation de toutes les erreurs et passage à la console en direct
+app.use((err, req, res, next) => {
+  console.error(err);
+  next(err);
+});
+
+// Utilisation de winston pour journaliser les erreurs
+app.use((err, req, res, next) => {
+  winstonLog.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+  res.status(500).json({ message: 'Une erreur est survenue sur le serveur. Veuillez réessayer plus tard.' });
+});
 
 // Utilisation des routes
 app.use('/api/auth', userRoutes);
