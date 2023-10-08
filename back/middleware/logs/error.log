@@ -1,1 +1,3 @@
-{"level":"error","message":"500 - Test error - /test-error - GET - ::1"}
+{"level":"error","message":"401 - Les informations d'authentification sont incorrectes - /api/auth/login - POST - ::1"}
+{"level":"error","message":"400 - Le format SVG n'est pas pris en charge - /api/sauces - POST - ::1"}
+{"level":"error","message":"500 - User validation failed: email: Error, expected `email` to be unique. Value: `test@test.com` - /api/auth/signup - POST - ::1"}
