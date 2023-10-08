@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
-const winstonLog = require("./middleware/winston-config");
+const winstonLog = require("./middlewares/winston-config");
 
 const userRoutes = require("./routes/user.js");
 const sauceRoutes = require("./routes/sauce.js");

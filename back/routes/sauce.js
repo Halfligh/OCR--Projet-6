@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../middleware/auth");
-const multer = require("../middleware/multer-config");
+const auth = require("../middlewares/auth");
+const multer = require("../middlewares/multer-config");
 const sauceCtrl = require("../controllers/sauce");
 const rateLimit = require("express-rate-limit");
 
