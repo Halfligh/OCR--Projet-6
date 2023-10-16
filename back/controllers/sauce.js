@@ -133,7 +133,7 @@ exports.getAllSauces = (req, res, next) => {
 exports.likeSauce = (req, res, next) => {
   const Sauce = require("../models/Sauce");
 
-  const userId = req.body.userId; // Récupération de l'ID de l'utilisateur
+  const userId = req.auth.userId; // Récupération de l'ID de l'utilisateur via l'auth
   const like = req.body.like; // Récupération du statut "like" (-1, 0 ou 1)
   const sauceId = req.params.id; // Récupération de l'ID de la sauce concernée
 
